@@ -1,0 +1,103 @@
+
+%11 Ќайти количество чисел, взаимно простых с заданным(Ќќƒ=1)
+nod(A,0,A):-!.
+nod(_,0,_):-!,fail.
+nod(A,B,C):-R is A mod B,nod(B,R,C).
+
+countU(X, Count):- countU2(X, X, Count).
+countU2(_, 1, 1):-!.
+countU2(X, CurDel, Count):-
+    CurDel1 is CurDel-1,
+    countU2(X, CurDel1, Count1),
+    nod(X, CurDel, NOD),
+   (    NOD is 1,
+    Count is Count1+1, !;
+    Count is Count1).
+
+countD(X, Count):-countD2(X, 1, X, Count).
+countD2(_, Count, 1, Count):-!.
+countD2(X, C, CurDel, Count):-CurDel1 is CurDel-1, nod(X, CurDel, NOD), (NOD is 1, C1 is C+1,
+countD2(X, C1, CurDel1, Count),!;
+countD2(X, C, CurDel1, Count)).
+
+% 12- делитель числа,€вл взаимно-простым с наиб кол-вом цифр
+% данного числа.
+
+%рассматриваетс€ один делитель
+f(X, Del, Count):-f(X, Del, 0, Count).
+f(0, _, Count, Count):-!.
+f(X, Del, C, Count):-
+    X1 is X div 10, Dig is X mod 10,
+    (nod(Dig, Del, NOD), NOD is 1, C1 is C+1, f(X1, Del, C1, Count),!;
+    f(X1, Del, C, Count)).
+
+
+%проход по всем делител€м и поиск необходимого
+f12(X, Result):-f12(X, X, 0, 0, Result).
+f12(_, 1, Result, _, Result):-!.
+f12(X, CurDel, MaxDel, MaxCount, Result):-
+    CurDel1 is CurDel-1, Ost is X mod CurDel,
+    (Ost is 0, f(X, CurDel, Count), Count>MaxCount, f12(X, CurDel1, CurDel, Count, Result),!;
+    f12(X, CurDel1, MaxDel, MaxCount, Result)).
+% 13-число избыточное-сумма его делителей больше самого числа.
+%Ќайдите количество чисел, меньшее 20000,которые нельз€ представить в виде суммы двух чисел с избытком.
+
+
+%14-ѕостроить предикат, получающий длину списка.
+list_length([H|T], N):-list_length([H|T], 0, N).
+list_length([], N, N):-!.
+list_length([_|T], Count, N):- Count1 is Count+1, list_length(T, Count1, N).
+
+%15-20
+% предикат чтени€ и предикат вывода.
+
+write_list([]):-!.
+write_list([Head|Tail]):-write(Head), write(" "), write_list(Tail).
+
+read_list(0, []):-!.
+read_list(N, [X|T]):- read(X), N1 is N-1, read_list(N1, T).
+
+%15(1)-количество элементов, расположенных после последнего максимального.
+%находим индекс максимального элемента
+indMax([H|T], Ind):-indMax(T,Ind,0,1,H).
+indMax([],Ind,Ind,_,_):-!.
+indMax([H|T],Ind,IndMax,NowInd,MaxEl):-
+    (H>=MaxEl, NewIndMax is NowInd,NewMax is H;
+    NewIndMax is IndMax,NewMax is MaxEl),
+    NewNowInd is NowInd+1,
+    indMax(T,Ind,NewIndMax,NewNowInd,NewMax).
+
+%вывод необходимых элементов
+task15:-write("Input lenght for list: "), read(Count),readList(Count,List),
+    write("Number of elements after max: "),
+    list_length(List,Len),indMax(List,IndMax),
+    X is Len-IndMax-1, write(X),!.
+
+% 16(12)-переставить в обратном пор€дке элементы массива, расположенные
+% между его мин и максимальным элементами.(не доделана)
+indMin([H|T], Ind):-indMin(T,Ind,0,1,H).
+indMin([],Ind,Ind,_,_):-!.
+indMin([H|T],Ind,IndMin,NowInd,MinEl):-
+    (H<=MinEl, NewIndMin is NowInd,NewMin is H;
+    NewIndMin is IndMin,NewMin is MinEl),
+    NewNowInd is NowInd+1,
+    indMin(T,Ind,NewIndMin,NewNowInd,NewMin).
+
+%17(14)-Ќеобходимо найти количество элементов в интервале.
+
+countAB([],A,B,Count):-Count is 0,!.
+countAB([H|T],A,B,Count):-
+    (
+        H<B,
+        H>A,
+        countAB(T,A,B,Count1),
+        Count1 is Count+1;
+        countAB(T,A,B,Count)
+    ).
+
+task17:- read(N),readList(List,N),read(A),read(B),countAB(List,A,B,Count),write(Count),!.
+
+
+
+
+
