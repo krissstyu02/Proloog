@@ -164,3 +164,32 @@ countAB([H|T],A,B,Count):-
 task17:- write("Input lenght for list: "), read(C),readList(C,List),read(A),read(B),
 countAB(List,A,B,Count),write(Count),!.
 
+%18(16)-Ќеобходимо найти элементы, расположенные между первым и вторым максимальным.
+listBetweenMax(List,NewList):-
+    indMax(List,IndMax),
+    secondMaxIndex(List,Max2,SecondIndex,IndMax),
+    (
+        IndMax < SecondIndex,
+        IndMax1 is IndMax+1,
+        cutList(List,IndMax1,SecondIndex,NewList);  %часть списка между максимумами
+
+        SecondIndex1 is SecondIndex+1,
+        cutList(List,SecondIndex1,IndMax,NewList)
+    ).
+%второй максимум
+secondMaxIndex([H|T],Max2,IndexMax2,IndMax):- secondMaxIndex([H|T],H,Max2,0,IndexMax2,0,IndMax).
+secondMaxIndex([],NowMax,Max2,NowIndex,IndexMax2,Ind,IndMax):-Max2 is NowMax,IndexMax2 is NowIndex,!.
+secondMaxIndex([H|T],NowMax,Max2,NowIndex,IndexMax2,Ind,IndMax):-
+    Ind1 is Ind+1,
+    (
+        H >= NowMax,
+
+        not(Ind = IndMax),
+
+        secondMaxIndex(T,H,Max2,Ind,IndexMax2,Ind1,IndMax);
+
+        secondMaxIndex(T,NowMax,Max2,NowIndex,IndexMax2,Ind1,IndMax)
+    ),!.
+
+task18:- write("Input lenght for list: "), read(Count),readList(Count,List),listBetweenMax(List,NewList),writeList(NewList),!.
+
