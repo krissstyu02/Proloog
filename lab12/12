@@ -149,3 +149,18 @@ swapBetweenMinAndMax(List,NewList):-
 
 task16:- write("Input lenght for list: "), read(Count),readList(Count,List),swapBetweenMinAndMax(List,NewList),writeList(NewList),!.
 
+%17(14)-Необходимо найти количество элементов в интервале.
+
+countAB([],A,B,Count):-Count is 0,!.
+countAB([H|T],A,B,Count):-
+    (
+        H<B,
+        H>A,
+        countAB(T,A,B,Count1),
+        Count is Count1+1;
+        countAB(T,A,B,Count)
+    ).
+
+task17:- write("Input lenght for list: "), read(C),readList(C,List),read(A),read(B),
+countAB(List,A,B,Count),write(Count),!.
+
