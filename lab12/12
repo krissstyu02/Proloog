@@ -48,3 +48,32 @@ f12(X, CurDel, MaxDel, MaxCount, Result):-
 list_length([H|T], N):-list_length([H|T], 0, N).
 list_length([], N, N):-!.
 list_length([_|T], Count, N):- Count1 is Count+1, list_length(T, Count1, N).
+
+%15-20
+% предикат чтения и предикат вывода.
+readList(0, []) :- !.
+readList(I, [X|T]) :- write("input - "),read(X), I1 is I - 1, readList(I1, T).
+
+write_list([]) :- !.
+write_list([X|T]) :- write(X), nl, write_list(T).
+
+%предикат добавления элементов
+append([],X,X).
+append([X|T],Y,[X|T1]) :- append(T,Y,T1).
+%15(1)-количество элементов, расположенных после последнего максимального.
+
+%находим индекс максимального элемента
+indMax([H|T], Ind):-indMax(T,Ind,0,1,H).
+indMax([],Ind,Ind,_,_):-!.
+indMax([H|T],Ind,IndMax,NowInd,MaxEl):-
+    (H>=MaxEl, NewIndMax is NowInd,NewMax is H;
+    NewIndMax is IndMax,NewMax is MaxEl),
+    NewNowInd is NowInd+1,
+    indMax(T,Ind,NewIndMax,NewNowInd,NewMax).
+
+%вывод необходимых элементов
+task15:-write("Input lenght for list: "), read(Count),readList(Count,List),
+    write("Number of elements after max: "),
+    list_length(List,Len),indMax(List,IndMax),
+    X is Len-IndMax-1, write(X),!.
+
