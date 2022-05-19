@@ -221,3 +221,26 @@ secondMinIndex([H|T],NowMin,Min2,NowIndex,IndexMin2,Ind,IndMin):-
     ),!.
 task19:- write("Input lenght for list: "), read(Count),readList(Count,List),listBetweenMin(List,NewList),list_length(NewList,Length),write(Length),!.
 
+%20 Необходимо проверить наличие максимального элемента массива в этом интервале.
+maxIndexInList([H|T],Max,IndexMax):- maxIndexInList([H|T],H,Max,0,IndexMax,0).
+maxIndexInList([],NowMax,Max,NowIndex,IndexMax,Index):-Max is NowMax,IndexMax is NowIndex,!.
+maxIndexInList([H|T],NowMax,Max,NowIndex,IndexMax,Index):-
+    Index1 is Index+1,
+    (
+        H >= NowMax,
+        maxIndexInList(T,H,Max,Index,IndexMax,Index1);
+        maxIndexInList(T,NowMax,Max,NowIndex,IndexMax,Index1)
+    ),!.
+ifMaxAB(List,A,B,Flag):-
+    maxIndexInList(List,Max,IndexMax),
+    (
+
+        A<Max,
+        B>Max,
+
+        Flag is 1;
+
+        Flag is 0
+    ).
+
+task20:-write("Input lenght for list: "), read(Count),readList(Count,List),read(A),read(B),ifMaxAB(List,A,B,Flag),write(Flag),!.
