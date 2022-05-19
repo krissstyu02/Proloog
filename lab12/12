@@ -193,3 +193,31 @@ secondMaxIndex([H|T],NowMax,Max2,NowIndex,IndexMax2,Ind,IndMax):-
 
 task18:- write("Input lenght for list: "), read(Count),readList(Count,List),listBetweenMax(List,NewList),writeList(NewList),!.
 
+%19(26)-Ќеобходимо найти количество элементов между первым и последним минимальным.
+listBetweenMin(List,NewList):-
+    indMin(List,IndMin),
+    secondMinIndex(List,Min2,SecondIndex,IndMin),
+    (
+        IndMin < SecondIndex,
+        IndMin1 is IndMin+1,
+        cutList(List,IndMin1,SecondIndex,NewList);  %часть списка между минимумами
+
+        SecondIndex1 is SecondIndex+1,
+        cutList(List,SecondIndex1,IndMin,NewList)
+    ).
+%второй максимум
+secondMinIndex([H|T],Min2,IndexMin2,IndMin):- secondMinIndex([H|T],H,Min2,0,IndexMin2,0,IndMin).
+secondMinIndex([],NowMin,Min2,NowIndex,IndexMin2,Ind,IndMin):-Min2 is NowMin,IndexMin2 is NowIndex,!.
+secondMinIndex([H|T],NowMin,Min2,NowIndex,IndexMin2,Ind,IndMin):-
+    Ind1 is Ind+1,
+    (
+        H=< NowMin,
+
+        not(Ind = IndMin),
+
+        secondMinIndex(T,H,Min2,Ind,IndexMin2,Ind1,IndMin);
+
+        secondMinIndex(T,NowMin,Min2,NowIndex,IndexMin2,Ind1,IndMin)
+    ),!.
+task19:- write("Input lenght for list: "), read(Count),readList(Count,List),listBetweenMin(List,NewList),list_length(NewList,Length),write(Length),!.
+
