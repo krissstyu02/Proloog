@@ -39,3 +39,12 @@ f12(X, CurDel, MaxDel, MaxCount, Result):-
     CurDel1 is CurDel-1, Ost is X mod CurDel,
     (Ost is 0, f(X, CurDel, Count), Count>MaxCount, f12(X, CurDel1, CurDel, Count, Result),!;
     f12(X, CurDel1, MaxDel, MaxCount, Result)).
+
+% 13-число избыточное-сумма его делителей больше самого числа.
+%Найдите количество чисел, меньшее 20000,которые нельзя представить в виде суммы двух чисел с избытком.
+
+
+%14-Построить предикат, получающий длину списка.
+list_length([H|T], N):-list_length([H|T], 0, N).
+list_length([], N, N):-!.
+list_length([_|T], Count, N):- Count1 is Count+1, list_length(T, Count1, N).
